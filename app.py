@@ -47,7 +47,7 @@ def get_instructions():
         cursor.close()
         connection.close()
         if instructions:
-            return instructions['text'], instructions['temperature']
+            return instructions['instruction'], instructions['temperature']
         return "", 0.7
     except Error as e:
         st.write(f"Error: {e}")
@@ -56,7 +56,7 @@ def get_instructions():
 # Função para salvar as instruções e temperatura
 
 
-def save_instructions(text, temperature):
+def save_instructions(instruction, temperature):
     try:
         connection = mysql.connector.connect(
             host=st.secrets["mysql"]["host"],
@@ -66,8 +66,8 @@ def save_instructions(text, temperature):
             database=st.secrets["mysql"]["database"]
         )
         cursor = connection.cursor()
-        query = "REPLACE INTO instructions (id, text, temperature) VALUES (1, %s, %s)"
-        cursor.execute(query, (text, temperature))
+        query = "REPLACE INTO instructions (id, instruction, temperature) VALUES (1, %s, %s)"
+        cursor.execute(query, (instruction, temperature))
         connection.commit()
         cursor.close()
         connection.close()
